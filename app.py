@@ -1,124 +1,105 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
-# Set page configuration for full-width layout
+# 1. Page Configuration
 st.set_page_config(
-    page_title="Unified Analytics Hub",
+    page_title="Multi-App Dashboard",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for UI enhancements and smooth tab spacing
+# 2. Custom CSS styling
 st.markdown("""
 <style>
-    /* Reduce top and bottom padding for max iframe viewing area */
-    .block-container {
-        padding-top: 1.5rem;
-        padding-bottom: 0rem;
+    .stApp > header { visibility: hidden; }
+    .main .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
         max-width: 100%;
     }
-
-    /* Style navigation tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
-        background-color: #f8f9fa;
-        padding: 8px 12px;
-        border-radius: 10px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
-
     .stTabs [data-baseweb="tab"] {
-        height: 42px;
-        border-radius: 6px;
-        padding: 0px 16px;
-        font-weight: 500;
-        color: #495057;
-        transition: all 0.2s ease-in-out;
+        height: 48px;
+        white-space: pre-wrap;
+        background-color: #f0f2f6;
+        border-radius: 8px 8px 0px 0px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-weight: 600;
     }
-
     .stTabs [aria-selected="true"] {
-        background-color: #ffffff !important;
-        color: #1f2937 !important;
-        font-weight: 700 !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important;
+        background-color: #0e1117;
+        color: #ffffff;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Registry of apps to display in top tabs
+# 3. Web App Directory
 APPS = [
     {
-        "title": "Noticeboard Dashboard",
-        "icon": "📌",
+        "title": "📋 Noticeboard Dashboard",
         "url": "https://noticeboard-dashboard-2.streamlit.app/",
-        "description": "Centralized noticeboard and dashboard feeds."
+        "description": "Noticeboard & Task Tracking Dashboard"
     },
     {
-        "title": "Octopus Tracker",
-        "icon": "🐙",
+        "title": "🐙 Octopus Tracker",
         "url": "https://octopus-tracker-1.streamlit.app/",
-        "description": "Energy tariff and usage tracking dashboard."
+        "description": "Octopus Energy Tariff & Usage Tracker"
     },
     {
-        "title": "Global Indices",
-        "icon": "📈",
+        "title": "📈 Global Indices",
         "url": "https://stocks-global-indices-noticeboard.netlify.app/",
-        "description": "Real-time stock market indices and overview."
+        "description": "Global Stock Market Indices Noticeboard"
     },
     {
-        "title": "Flashcards",
-        "icon": "🗂️",
+        "title": "🎴 Flashcards",
         "url": "https://flashcard-everywhere.netlify.app/",
-        "description": "Everywhere interactive flashcard learning tool."
+        "description": "Flashcard Study & Review App"
     },
     {
-        "title": "Data Quality Dashboard",
-        "icon": "🛡️",
+        "title": "🔍 Data Quality",
         "url": "https://data-quality-dashboard-260913.streamlit.app/",
-        "description": "Data validation, checks, and quality analytics."
+        "description": "Data Quality Analysis Dashboard"
     }
 ]
 
-with st.sidebar:
-    st.title("⚙️ Portal Controls")
-    st.markdown("Access all consolidated tools in one place.")
-    
-    st.divider()
-    
-    # Adjustable iframe height
-    iframe_height = st.slider("Iframe Height (px)", min_value=500, max_value=1200, value=850, step=50)
-    
-    if st.button("🔄 Refresh Application", use_container_width=True):
-        st.rerun()
+# 4. Sidebar Options
+st.sidebar.title("🎛️ App Controls")
+st.sidebar.markdown("---")
 
-    st.divider()
-    
-    # Direct links to external apps
-    st.markdown("### 🔗 Direct Links")
-    for app in APPS:
-        st.markdown(f"• [{app['icon']} {app['title']}]({app['url']})")
+iframe_height = st.sidebar.slider(
+    "📏 Frame Height (px)",
+    min_value=600,
+    max_value=1400,
+    value=850,
+    step=50,
+    help="Adjust iframe height to fit your display size."
+)
 
-    st.caption("Built with Streamlit • Native `st.iframe` Portal")
+scrolling_enabled = st.sidebar.checkbox("📜 Enable Frame Scrolling", value=True)
 
-st.markdown("## 🌐 Unified Application Hub")
+st.sidebar.markdown("---")
+st.sidebar.subheader("🔗 Direct External Links")
+for app in APPS:
+    st.sidebar.markdown(f"• [{app['title']}]({app['url']})")
 
-tab_labels = [f"{app['icon']} {app['title']}" for app in APPS]
-tabs = st.tabs(tab_labels)
+# 5. Top Tab Bar & Embed Render
+tab_titles = [app["title"] for app in APPS]
+tabs = st.tabs(tab_titles)
 
-for i, tab in enumerate(tabs):
-    app = APPS[i]
+for idx, tab in enumerate(tabs):
+    app = APPS[idx]
     with tab:
-        col1, col2 = st.columns([4, 1])
-        with col1:
-            st.caption(f"**Description:** {app['description']}")
-        with col2:
-            st.markdown(f"<p style='text-align: right;'><a href='{app['url']}' target='_blank'>↗ Open in new tab</a></p>", unsafe_allow_html=True)
-
-        # Native Streamlit iframe component
-        st.iframe(
+        st.caption(f"📍 **{app['description']}** — [Open directly in new tab ↗]({app['url']})")
+        
+        # Streamlit embedded iframe component
+        components.iframe(
             src=app["url"],
             height=iframe_height,
-            scrolling=True
+            scrolling=scrolling_enabled
         )
