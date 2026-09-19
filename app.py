@@ -63,7 +63,7 @@ APPS = [
     },
     {
         "title": "🔍 Data Quality",
-        "url": "https://data-quality-dashboard-260913.streamlit.app/",
+        "url": "https://data-quality-dashboard-260913.streamlit.app/?embed=true",
         "description": "Data Quality Analysis Dashboard"
     }
 ]
