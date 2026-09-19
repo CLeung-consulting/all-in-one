@@ -43,12 +43,12 @@ st.markdown("""
 APPS = [
     {
         "title": "📋 Noticeboard Dashboard",
-        "url": "https://noticeboard-dashboard-2.streamlit.app/",
+        "url": "https://noticeboard-dashboard-2.streamlit.app/?embed=true",
         "description": "Noticeboard & Task Tracking Dashboard"
     },
     {
         "title": "🐙 Octopus Tracker",
-        "url": "https://octopus-tracker-1.streamlit.app/",
+        "url": "https://octopus-tracker-1.streamlit.app/?embed=true",
         "description": "Octopus Energy Tariff & Usage Tracker"
     },
     {
